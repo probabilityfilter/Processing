@@ -1,0 +1,48 @@
+// Poisson-Disc: create points that are uniformly-packed, but no clear geometric pattern 
+// 2014_06
+int t_start = millis();
+int n=0; //sequence number of dot
+int nmax=5000; //total number of dots
+//array to store x,y co-ordinates of all dots
+float [][] myArray = new float [nmax*2][2]; 
+       void setup() {
+       size(400, 400);
+       background(0);
+            } 
+     void draw() {
+  n=n+1;
+  if (n<nmax+1) {
+//randomly place the dot within the canvas
+    float rx = random(400); 
+//randomly place the dot within the canvas
+    float ry = random(400); 
+    myArray[n][0]=rx; //store x co-ordinate of dot
+    myArray[n][1]=ry; //store x co-ordinate of dot
+//     println(n); //print dot number to track progress 
+      fill(255);
+      stroke(255);
+      ellipse (rx,ry,5,5); //draw dot on canvas
+  }
+//start elimination process once maximum number of dots are drawn
+  if (n==nmax) { 
+    for (int i = 0; i < nmax; i = i+1) { //cycle through every dot for all other dots
+    if ((myArray[i][0] != 0) && (myArray[i][1] != 0)){
+      for (int j = i+1; j < nmax; j = j+1) { //cycle through every dot for all other dots, without repeating
+        float r=dist(myArray[i][0],myArray[i][1],myArray[j][0],myArray[j][1]);
+//      println(r);
+      if (r<10){ //detect dots that are within 10 units of each other
+    fill(0);
+    stroke(0);
+    ellipse (myArray[j][0],myArray[j][1],5,5);
+    myArray[j][0]=0; //zero out the eliminated dot to ensure it does not eliminate...
+    myArray[j][1]=0; //...the parent dot during its turn as the parent dot
+      fill(255);
+      stroke(255);
+      ellipse (myArray[i][0],myArray[i][1],5,5); //eliminate the close-by dots
+      }
+          }
+    }
+  }
+  println(millis());
+  }
+     }
